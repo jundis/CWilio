@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jundis
- * Date: 12/1/2016
- * Time: 9:56 AM
- */
+
 require_once("cwilio-config.php");
 header("content-type: text/xml");
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";

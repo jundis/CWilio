@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jundis
- * Date: 12/1/2016
- * Time: 10:06 AM
- */
 
 //Connectwise Configuration
 $connectwise = "https://cw.domain.com"; //Set your Connectwise URL

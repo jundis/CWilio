@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jundis
- * Date: 12/1/2016
- * Time: 12:54 PM
- */
 
 require_once("cwilio-config.php");
 
@@ -65,7 +59,7 @@ if(array_key_exists("RecordingSource",$_REQUEST))
         die("ConnectWise Error: " . $errors[0]->message); //Return CW error
     }
 
-    $name = "twilio" . date("mdYg-i") . ".wav";
+    $name = "vm" . date("mdY-gis") . ".wav";
     file_put_contents($name, fopen($_REQUEST['RecordingUrl'],"r"));
     $ch = curl_init(); //Initiate a curl session
     $audioheader = array("Authorization: Basic ". base64_encode(strtolower($companyname) . "+" . $apipublickey . ":" . $apiprivatekey), "Content-Type: multipart/form-data");
