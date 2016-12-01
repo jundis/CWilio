@@ -85,40 +85,13 @@ if(array_key_exists("RecordingSource",$_REQUEST))
 
     $answerTCmd = curl_exec($ch);
     $headerLen = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-    var_dump($answerTCmd);
+
     $curlBodyTCmd = substr($answerTCmd, $headerLen);
     // If there was an error, show it
     if (curl_error($ch)) {
         die(curl_error($ch));
     }
     curl_close($ch);
-    if($curlBodyTCmd == "ok") //Slack catch
-    {
-        return null;
-    }
-    $jsonDecode = json_decode($curlBodyTCmd); //Decode the JSON returned by the CW API.
-
-    if(array_key_exists("code",$jsonDecode)) { //Check if array contains error code
-        if($jsonDecode->code == "NotFound") { //If error code is NotFound
-            die("Connectwise record was not found."); //Report that the ticket was not found.
-        }
-        else if($jsonDecode->code == "Unauthorized") { //If error code is an authorization error
-            die("401 Unauthorized, check API key to ensure it is valid."); //Fail case.
-        }
-        else if($jsonDecode->code == NULL)
-        {
-            //do nothing.
-        }
-        else {
-            die("Unknown Error Occurred, check API key and other API settings. Error: " . $jsonDecode->code); //Fail case.
-        }
-    }
-    if(array_key_exists("errors",$jsonDecode)) //If connectwise returned an error.
-    {
-        $errors = $jsonDecode->errors; //Make array easier to access.
-
-        die("ConnectWise Error: " . $errors[0]->message); //Return CW error
-    }
 
     unlink($name);
 
