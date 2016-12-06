@@ -238,7 +238,7 @@ if(array_key_exists("RecordingSource",$_REQUEST))
 
         die("ConnectWise Error: " . $errors[0]->message); //Return CW error
     }
-
+    die();
 }
 if($_REQUEST['Digits']=="hangup")
 {
