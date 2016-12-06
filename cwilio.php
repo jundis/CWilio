@@ -62,6 +62,7 @@ else
 {
     echo "<Gather numDigits='1' action='cwilio.php' method='POST'>\n";
     echo "<Say>Thank you for calling $ivrname, please select from the following options. Press 1 for Tecnical Support. Press 2 for Sales. Press 3 for the staff directory. Press 0 to be forwarded to the helpdesk.</Say>\n";
+    echo "<Pause length='3' />\n";
     echo "<Say>Thank you for calling $ivrname, please select from the following options. Press 1 for Tecnical Support. Press 2 for Sales. Press 3 for the staff directory. Press 0 to be forwarded to the helpdesk.</Say>\n";
     echo "</Gather>\n";
 }
