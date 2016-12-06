@@ -6,8 +6,33 @@ if(array_key_exists("RecordingSource",$_REQUEST))
 {
     $ch = curl_init(); //Initiate a curl session
 
+    //Create curl array to set the API url, headers, and necessary flags.
+    $curlOpts = array(
+        CURLOPT_URL => "https://$accountsid:$authtoken@api.twilio.com/2010-04-01/Accounts/" . $_REQUEST["AccountSid"] . "/Calls/" . $_REQUEST["CallSid"] . ".json",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => array(),
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HEADER => 1,
+    );
+    curl_setopt_array($ch, $curlOpts); //Set the curl array to $curlOpts
+
+    $answerTData = curl_exec($ch); //Set $answerTData to the curl response to the API.
+    $headerLen = curl_getinfo($ch, CURLINFO_HEADER_SIZE);  //Get the header length of the curl response
+    $curlBodyTData = substr($answerTData, $headerLen); //Remove header data from the curl string.
+
+    // If there was an error, show it
+    if (curl_error($ch)) {
+        die(curl_error($ch));
+    }
+    curl_close($ch);
+
+    $jsonDecode = json_decode($curlBodyTData); //Decode the JSON returned by the Twilio API.
+
+    $ch = curl_init(); //Initiate a curl session
+
+    $recordtime = gmdate("i:s", $_REQUEST['RecordingDuration']);
     $header = array("Authorization: Basic ". base64_encode(strtolower($companyname) . "+" . $apipublickey . ":" . $apiprivatekey), "Content-Type: application/json");
-    $postfieldspre = array("internalAnalysisFlag" => "True", "text" => "A new voice mail has been received in regards to this ticket. It has been attached to the documents section of this ticket."); //Post ticket as API user
+    $postfieldspre = array("internalAnalysisFlag" => "True", "text" => "A new voice mail has been received in regards to this ticket. It has been attached to the documents section of this ticket.\nDuration: " . $recordtime . "\nFrom: " . $jsonDecode->from_formatted); //Post ticket as API user
     $postfields = json_encode($postfieldspre); //Format the array as JSON
 
     //Same as previous curl array but includes required information for PATCH commands.
