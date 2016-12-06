@@ -19,6 +19,7 @@ $phoneprefix = "+1PHONENUMBER"; //Phone prefix for directory. If your direct dia
 $extensiondigits = "2"; //Number of digits for company phone numbers. Number of X's according to above info.
 $recordcalls = false; //Set to true if you want all transferred calls to be recorded.
 $localstorage = false; //Set to true if you want all non-ticket related recorded calls to be downloaded to the server CWilio is stored on. Requires a recordings subfolder where this script is stored.
+$timeout = "15"; //Set to lower than your local voice mail timeout, otherwise Twilio will treat that as an answered call and the IVR voice mail will not work.
 
 $directory = "For John Smith, enter 01. 
             For Jenny Doe, enter 09. 

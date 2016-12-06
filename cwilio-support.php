@@ -162,11 +162,11 @@ else
     echo "<Say>Now connecting you with " . $name . ", please hold.</Say>\n";
     if($recordcalls)
     {
-        echo "<Dial timeout='15' record='record-from-answer' recordingStatusCallback='cwilio-callrecord.php?ticket=" . $_REQUEST['Digits'] . "'>$phone</Dial>\n";
+        echo "<Dial timeout='$timeout' record='record-from-answer' recordingStatusCallback='cwilio-callrecord.php?ticket=" . $_REQUEST['Digits'] . "'>$phone</Dial>\n";
     }
     else
     {
-        echo "<Dial timeout='15'>$phone</Dial>\n";
+        echo "<Dial timeout='$timeout'>$phone</Dial>\n";
     }
     echo "<Gather numDigits='6' action='cwilio-vm.php?ticket=".$_REQUEST['Digits']."' method='POST'>\n";
     echo "<Say>$name is currently unavailable. Please press 1 to leave a message, or press 2 to speak with another technician.</Say>\n";
