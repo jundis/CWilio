@@ -15,7 +15,14 @@ if(array_key_exists('Digits',$_REQUEST))
     }
     else if($_REQUEST['Digits']=='2')
     {
-        echo "<Dial>$sales</Dial>\n";
+        if($recordcalls)
+        {
+            echo "<Dial record='record-from-answer' recordingStatusCallback='cwilio-callrecord.php?ticket=no'>$sales</Dial>\n";
+        }
+        else
+        {
+            echo "<Dial>$sales</Dial>\n";
+        }
     }
     else if($_REQUEST['Digits']=='3')
     {
@@ -37,7 +44,7 @@ if(array_key_exists('Digits',$_REQUEST))
 else
 {
     echo "<Gather numDigits='1' action='cwilio.php' method='POST'>\n";
-    echo "<Say>Thank you for calling $ivrname, please select from the following options. Press 1 for Tecnical Support. Press 2 for Sales. Press 3 for the staff directory. Press 0 to be forwarded to the helpdesk.</Say>\n";
+    echo "<Say loop='2'>Thank you for calling $ivrname, please select from the following options. Press 1 for Tecnical Support. Press 2 for Sales. Press 3 for the staff directory. Press 0 to be forwarded to the helpdesk.</Say>\n";
     echo "</Gather>\n";
 }
 
