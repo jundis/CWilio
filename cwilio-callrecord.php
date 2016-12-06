@@ -39,9 +39,9 @@ if(array_key_exists("RecordingSource",$_REQUEST))
     $jsonDecode = json_decode($curlBodyTData); //Decode the JSON returned by the Twilio API.
 
     $ch = curl_init(); //Initiate a curl session
-
+    $recordtime = gmdate("i:s", $_REQUEST['RecordingDuration']);
     $header = array("Authorization: Basic ". base64_encode(strtolower($companyname) . "+" . $apipublickey . ":" . $apiprivatekey), "Content-Type: application/json");
-    $postfieldspre = array("internalAnalysisFlag" => "True", "text" => "A call recording has been received in regards to this ticket. It has been attached to the documents section of this ticket.\nDuration: " . $jsonDecode->duration . " seconds\nFrom: " . $jsonDecode->from_formatted); //Post ticket as API user
+    $postfieldspre = array("internalAnalysisFlag" => "True", "text" => "A call recording has been received in regards to this ticket. It has been attached to the documents section of this ticket.\nDuration: " . $recordtime . "\nFrom: " . $jsonDecode->from_formatted); //Post ticket as API user
     $postfields = json_encode($postfieldspre); //Format the array as JSON
 
     //Same as previous curl array but includes required information for POST commands.
