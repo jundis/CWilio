@@ -5,12 +5,12 @@ header("content-type: text/xml");
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 echo "<Response>\n";
 
-if(strlen($_REQUEST['Digits'])<5)
+if(strlen($_REQUEST['Digits'])<$ticketlength)
 {
     if($_REQUEST['Digits']=='1')
     {
-        echo "<Gather numDigits='6' timeout='15' action='cwilio-support.php' method='POST'>\n";
-        echo "<Say>Please enter your 6-digit ticket number. If you do not know your case number, press the pound key to be routed to the helpdesk.</Say>\n";
+        echo "<Gather numDigits='" . $ticketlength . "' timeout='15' action='cwilio-support.php' method='POST'>\n";
+        echo "<Say>Please enter your " . $ticketlength . "-digit ticket number. If you do not know your case number, press the pound key to be routed to the helpdesk.</Say>\n";
         echo "</Gather>\n";
     }
     else

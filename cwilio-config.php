@@ -5,6 +5,7 @@ $connectwise = "https://cw.domain.com"; //Set your Connectwise URL
 $companyname = "company"; //Set your company name from Connectwise. This is the company name field from login.
 $apipublickey = "Connectwise Public Key"; //Public API key
 $apiprivatekey = "Connectwise Private Key"; //Private API key
+$ticketlength = "6"; //Expected ticket number length for CW tickets. This is required so the IVR kicks into gear after X numbers are entered. You can also specify that they need to press # instead after entering ticket.
 
 //IVR Configuration
 $ivrname = "Company Inc";
