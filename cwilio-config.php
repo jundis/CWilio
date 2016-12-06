@@ -14,6 +14,7 @@ $sales = "+1PHONENUMBER"; //Sales phone number
 $phoneprefix = "+1PHONENUMBER"; //Phone prefix for directory. If your direct dial numbers are 612-867-53XX, set this to +161286753.
 $extensiondigits = "2"; //Number of digits for company phone numbers. Number of X's according to above info.
 $recordcalls = false; //Set to true if you want all transferred calls to be recorded.
+$localstorage = false; //Set to true if you want all recorded calls to be downloaded to the server CWilio is stored on. Requires a recordings subfolder where this script is stored.
 
 $directory = "For John Smith, enter 01. 
             For Jenny Doe, enter 09. 
