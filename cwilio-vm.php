@@ -208,7 +208,7 @@ echo "<Response>\n";
 
 if($_REQUEST['Digits']=='1')
 {
-    //echo "<Say>Please leave a message after the beep and the assigned technician will reach out to you shortly.</Say>\n";
+    echo "<Say>Please leave a message after the beep and the assigned technician will reach out to you shortly.</Say>\n";
     echo "<Record recordingStatusCallback='cwilio-vm.php?ticket=" . $_GET["ticket"] . "' recordingStatusCallbackMethod='POST'/>";
 }
 else

@@ -160,7 +160,7 @@ else
     $phone = preg_replace('/\D+/', '', $phone);
     $phone = "+1" . $phone;
     echo "<Say>Now connecting you with " . $name . ", please hold.</Say>\n";
-    echo "<Dial timeout='1'>$phone</Dial>\n";
+    echo "<Dial timeout='15'>$phone</Dial>\n";
     echo "<Gather numDigits='6' action='cwilio-vm.php?ticket=".$_REQUEST['Digits']."' method='POST'>\n";
     echo "<Say>$name is currently unavailable. Please press 1 to leave a message, or press 2 to speak with another technician.</Say>\n";
     echo "</Gather>\n";
