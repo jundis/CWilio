@@ -15,7 +15,7 @@ if(strlen($_REQUEST['Digits'])<$ticketlength)
     }
     else
     {
-        echo "<Dial>$helpdesk</Dial>\n";
+        echo $dialhelpdesk;
     }
 }
 else
@@ -49,7 +49,7 @@ else
 
     if(array_key_exists("code",$jsonDecode)) { //Check if array contains error code
         if($jsonDecode->code == "NotFound") { //If error code is NotFound
-            die("<Say>Connectwise ticket ".$_REQUEST['Digits']." was not found. You'll be forwarded to the help desk momentarily</Say>\n<Dial>$helpdesk</Dial>\n</Response>"); //Report that the ticket was not found.
+            die("<Say>Connectwise ticket ".$_REQUEST['Digits']." was not found. You'll be forwarded to the help desk momentarily</Say>\n$dialhelpdesk</Response>"); //Report that the ticket was not found.
         }
         if($jsonDecode->code == "Unauthorized") { //If error code is an authorization error
             die("<Say>401 Unauthorized, check API key to ensure it is valid.</Say>\n</Response>"); //Fail case.
@@ -95,7 +95,7 @@ else
 
     if(array_key_exists("code",$jsonDecode)) { //Check if array contains error code
         if($jsonDecode->code == "NotFound") { //If error code is NotFound
-            die("<Say>Connectwise ticket ".$_REQUEST['Digits']." was not found. You'll be forwarded to the help desk momentarily</Say>\n<Dial>$helpdesk</Dial>\n</Response>"); //Report that the ticket was not found.
+            die("<Say>Connectwise ticket ".$_REQUEST['Digits']." was not found. You'll be forwarded to the help desk momentarily</Say>\n$dialhelpdesk</Response>"); //Report that the ticket was not found.
         }
         if($jsonDecode->code == "Unauthorized") { //If error code is an authorization error
             die("<Say>401 Unauthorized, check API key to ensure it is valid.</Say>\n</Response>"); //Fail case.
@@ -139,7 +139,7 @@ else
 
     if(array_key_exists("code",$jsonDecode)) { //Check if array contains error code
         if($jsonDecode->code == "NotFound") { //If error code is NotFound
-            die("<Say>Connectwise ticket ".$_REQUEST['Digits']." was not found. You'll be forwarded to the help desk momentarily</Say>\n<Dial>$helpdesk</Dial>\n</Response>"); //Report that the ticket was not found.
+            die("<Say>Connectwise ticket ".$_REQUEST['Digits']." was not found. You'll be forwarded to the help desk momentarily</Say>\n$dialhelpdesk</Response>"); //Report that the ticket was not found.
         }
         if($jsonDecode->code == "Unauthorized") { //If error code is an authorization error
             die("<Say>401 Unauthorized, check API key to ensure it is valid.</Say>\n</Response>"); //Fail case.

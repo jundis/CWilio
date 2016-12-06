@@ -13,10 +13,22 @@ $helpdesk = "+1PHONENUMBER"; //Helpdesk phone number
 $sales = "+1PHONENUMBER"; //Sales phone number
 $phoneprefix = "+1PHONENUMBER"; //Phone prefix for directory. If your direct dial numbers are 612-867-53XX, set this to +161286753.
 $extensiondigits = "2"; //Number of digits for company phone numbers. Number of X's according to above info.
+$recordcalls = false; //Set to true if you want all transferred calls to be recorded.
 
 $directory = "For John Smith, enter 01. 
             For Jenny Doe, enter 09. 
             etc etc";
 
+//---
+//Do not edit below
+//---
 
+if($recordcalls)
+{
+    $dialhelpdesk = "<Dial record='record-from-answer' recordingStatusCallback='cwilio-callrecord.php?ticket=no'>$helpdesk</Dial>\n";
+}
+else
+{
+    $dialhelpdesk = "<Dial>$helpdesk</Dial>\n";
+}
 ?>

@@ -213,7 +213,7 @@ if($_REQUEST['Digits']=='1')
 }
 else
 {
-    echo "<Dial>$helpdesk</Dial>\n";
+    echo $dialhelpdesk;
 }
 
 echo "</Response>";

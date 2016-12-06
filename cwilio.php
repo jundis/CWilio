@@ -25,7 +25,7 @@ if(array_key_exists('Digits',$_REQUEST))
     }
     else if($_REQUEST['Digits']=='0')
     {
-        echo "<Dial>$helpdesk</Dial>\n";
+        echo $dialhelpdesk;
     }
     else
     {
