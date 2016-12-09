@@ -37,6 +37,11 @@ $extensiondigits = "2"; //Number of digits for company phone numbers. Number of 
 $recordcalls = false; //Set to true if you want all transferred calls to be recorded.
 $localstorage = false; //Set to true if you want all non-ticket related recorded calls to be downloaded to the server CWilio is stored on. Requires a recordings subfolder where this script is stored.
 $timeout = "15"; //Set to lower than your local voice mail timeout, otherwise Twilio will treat that as an answered call and the IVR voice mail will not work.
+$nightmode = 0; //Set to 1 if you want to enable a night mode auto-attendant.
+$afterhourswarning = "Please note that after hours calls are billed at a separate rate outside of the normal service contract."; //Warning for billable time on after hours call, leave blank for none.
+$startday = "8:00AM"; //Start of your workday
+$endday = "5:00PM"; //End of your workday
+$timezone = "America/Chicago"; //Set your timezone here.
 
 $directory = "For John Smith, enter 01. 
             For Jenny Doe, enter 09. 
@@ -46,8 +51,13 @@ $directory = "For John Smith, enter 01.
 //Do not edit below
 //---
 
+//Timezone Setting to be used for all files.
+date_default_timezone_set($timezone);
+
+//Set authentication for twilio
 $twilauth = "Authentication: Basic " . base64_encode($accountsid . ":" . $authtoken);
 
+//Record calls switch
 if($recordcalls)
 {
     $dialhelpdesk = "<Dial record='record-from-answer' recordingStatusCallback='cwilio-callrecord.php?ticket=no'>$helpdesk</Dial>\n";
