@@ -9,6 +9,10 @@
 5. Set the "A call comes in" URL to https://domain.tld/cwilio.php
 6. Call your number and test it out!
 
+### VM-Only
+
+You can use the vmonly and vmonlyah files to just transcribe and e-mail for Twilio voice mails. This is just a proof of concept at this point and will be expanded to actually make tickets later on.
+
 ## API Key Setup
 
 1. Login to ConnectWise
