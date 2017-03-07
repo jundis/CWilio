@@ -1,11 +1,6 @@
 <?php
 
 require_once("cwilio-config.php");
-require 'vendor/autoload.php';
-
-$smtpserver = "mail.domain.com";
-$to = "support@domain.com";
-$from = "vm@domain.com";
 
 if(array_key_exists("recorded",$_REQUEST))
 {
@@ -59,59 +54,118 @@ if(array_key_exists("recorded",$_REQUEST))
         die("<Say>ConnectWise Error: " . $errors[0]->message . "</Say>\n</Response>"); //Return CW error
     }
 
-    $mail = new PHPMailer;
+    $subject = 'After hours voice message from ' . $_REQUEST['From'];
 
-    $mail->isSMTP();                                      // Set mailer to use SMTP
-    $mail->Host = $smtpserver;  // Specify main and backup SMTP servers
-    $mail->SMTPAuth = false;                               // Enable SMTP authentication
-
-    $mail->From = $from;
-    $mail->FromName = 'After-Hours VM';
-    $mail->addAddress($to);     // Add a recipient
-
-    $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-    $mail->addAttachment($name);         // Add attachments
-    $mail->isHTML(true);                                  // Set email format to HTML
-
-    $mail->Subject = 'After hours voice message from ' . $_REQUEST['From'];
-
-    if($jsonDecode!=null)
-    {
+    if ($jsonDecode != null) {
         $phonetype = null;
 
-        foreach($jsonDecode->communicationItems as $comitem)
-        {
-            if ($comitem->value == $phonenumber)
-            {
+        foreach ($jsonDecode->communicationItems as $comitem) {
+            if ($comitem->value == $phonenumber) {
                 $phonetype = strtolower($comitem->type->name);
 
             }
         }
 
-        if ($phonetype == null)
-        {
-            $mail->Body    = "The voice mail is attached, and a transcribed text can be found below. This voice mail appears to be from " . $jsonDecode->firstName . " " . $jsonDecode->lastName . " of " . $jsonDecode->company->name . " <br><br>" . $_REQUEST['TranscriptionText'];
-            $mail->AltBody = nl2br("The voice mail is attached, and a transcribed text can be found below. This voice mail appears to be from " . $jsonDecode->firstName . " " . $jsonDecode->lastName . " of " . $jsonDecode->company->name . " \n\n" . $_REQUEST['TranscriptionText']);
+        if ($phonetype == null) {
+            $body = "The voice mail is attached, and a transcribed text can be found below. This voice mail appears to be from " . $jsonDecode->firstName . " " . $jsonDecode->lastName . " of " . $jsonDecode->company->name . " \n\n" . $_REQUEST['TranscriptionText'];
 
+        } else {
+            $body = "The voice mail is attached, and a transcribed text can be found below. This voice mail appears to be from " . $jsonDecode->firstName . " " . $jsonDecode->lastName . " of " . $jsonDecode->company->name . " from their " . $phonetype . " phone \n\n" . $_REQUEST['TranscriptionText'];
         }
-        else
-        {
-            $mail->Body    = "The voice mail is attached, and a transcribed text can be found below. This voice mail appears to be from " . $jsonDecode->firstName . " " . $jsonDecode->lastName . " of " . $jsonDecode->company->name . " from their " . $phonetype . " phone <br><br>" . $_REQUEST['TranscriptionText'];
-            $mail->AltBody = nl2br("The voice mail is attached, and a transcribed text can be found below. This voice mail appears to be from " . $jsonDecode->firstName . " " . $jsonDecode->lastName . " of " . $jsonDecode->company->name . " from their " . $phonetype . " phone \n\n" . $_REQUEST['TranscriptionText']);
-        }
+
+        $postarray = array(
+            "summary" => $subject,
+            "initialInternalAnalysis" => $body,
+            "company" => array(
+                "id" => $jsonDecode->company->id
+            ),
+            "board" => array(
+                "id" => $boardID
+            ),
+            "contact" => array(
+                "id" => $jsonDecode->id
+            ));
+    } else {
+        $body = "The voice mail is attached, and a transcribed text can be found below.\r\n\r\n" . str_replace('<br />', ' ', $_REQUEST['TranscriptionText']);
+
+        $postarray = array(
+            "summary" => $subject,
+            "initialInternalAnalysis" => $body,
+            "board" => array(
+                "id" => $boardID
+            ),
+        );
+    }
+
+    $header = array("Authorization: Basic " . base64_encode(strtolower($companyname) . "+" . $apipublickey . ":" . $apiprivatekey), "Content-Type: application/json");
+    $ticketurl = $connectwise . "/v_4_6_release/apis/3.0/service/tickets";
+
+    $ch = curl_init();
+
+    $data = json_encode($postarray);
+
+    $curlOpts = array(
+        CURLOPT_URL => $ticketurl,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => $header,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_POSTFIELDS => $data,
+        CURLOPT_POST => 1,
+        CURLOPT_HEADER => 1,
+    );
+
+    curl_setopt_array($ch, $curlOpts);
+
+    $response = curl_exec($ch);
+
+    $headerLen = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    $response = substr($response, $headerLen);
+
+    if (curl_error($ch)) {
+        die(curl_error($ch));
+    }
+
+    curl_close($ch);
+
+    $response = json_decode($response);
+
+    if (array_key_exists("id", $response))
+    {
+        $ticketnumber = $response->id;
     }
     else
     {
-        $mail->Body    = 'The voice mail is attached, and a transcribed text can be found below.<br><br>' . str_replace('<br />', ' ',$_REQUEST['TranscriptionText']);
-        $mail->AltBody = "The voice mail is attached, and a transcribed text can be found below.\r\n\r\n" . str_replace('<br />', ' ',$_REQUEST['TranscriptionText']);
+        die("Failed to make ticket.");
     }
 
-    if(!$mail->send()) {
-        echo 'Message could not be sent.';
-        echo 'Mailer Error: ' . $mail->ErrorInfo;
-    } else {
-        echo 'Message has been sent';
+    $name = "vm" . date("mdY-gis") . ".wav";
+    file_put_contents($name, fopen($_REQUEST['RecordingUrl'],"r"));
+    $ch = curl_init(); //Initiate a curl session
+    $audioheader = array("Authorization: Basic ". base64_encode(strtolower($companyname) . "+" . $apipublickey . ":" . $apiprivatekey), "Content-Type: multipart/form-data");
+    $data = array("File" => '@' . $name, "recordType" => "ticket", "recordId" => $ticketnumber,"title"=>"Twilio voice mail on " . date("m-d-Y g:i:sa"));
+
+    $curlOpts = array(
+        CURLOPT_URL => $connectwise . "/v4_6_release/apis/3.0/system/documents",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => $audioheader,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POST => 1,
+        CURLOPT_POSTFIELDS => $data,
+        CURLOPT_HEADER => 1,
+    );
+    curl_setopt_array($ch, $curlOpts);
+
+    $answerTCmd = curl_exec($ch);
+    $headerLen = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+
+    $curlBodyTCmd = substr($answerTCmd, $headerLen);
+    // If there was an error, show it
+    if (curl_error($ch)) {
+        die(curl_error($ch));
     }
+    curl_close($ch);
+
     unlink($name);
 }
 else
@@ -121,7 +175,7 @@ else
     echo "<Response>\n";
     echo "<Say>Please leave a message after the beep.</Say>\n";
     //echo '<Play>http://domain.com/cwilio/vmgreetingah.mp3</Play>'; //Uncomment this and comment above line to play a mp3 greeting instead.
-    echo "<Record transcribe='true' transcribeCallback='cwilio-vmonly.php?recorded=true'/>\n";
+    echo "<Record transcribe='true' transcribeCallback='cwilio-vmonlyah.php?recorded=true'/>\n";
     echo "</Response>";
 }
 
