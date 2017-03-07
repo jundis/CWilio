@@ -11,7 +11,11 @@
 
 ### VM-Only
 
-You can use the vmonly and vmonlyah files to just transcribe and e-mail for Twilio voice mails. This is just a proof of concept at this point and will be expanded to actually make tickets later on.
+You can use the vmonly and vmonlyah files to just transcribe and create tickets for voice mails within ConnectWise.
+
+Just configure the CW block of cwilio-config.php and place that and vmonly/vmonlyah.php in a folder and point a twilio line to it.
+
+Note that in order to use the greeting instead of robo text please see comment towards end of file.
 
 ## API Key Setup
 
