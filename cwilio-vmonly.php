@@ -3,6 +3,14 @@
 require_once("cwilio-config.php");
 
 if(array_key_exists("recorded",$_REQUEST)) {
+    if($_REQUEST["RecordingDuration"]<=2)
+    {
+        die("Recording too short");
+    }
+
+    $name = "vm" . date("mdY-gis") . ".wav";
+    file_put_contents($name, fopen($_REQUEST['RecordingUrl'],"r"));
+
     $phonenumber = substr(preg_replace('/\D+/', '', $_REQUEST['From']), 1);
 
     $header = array("Authorization: Basic " . base64_encode(strtolower($companyname) . "+" . $apipublickey . ":" . $apiprivatekey));
@@ -133,8 +141,6 @@ if(array_key_exists("recorded",$_REQUEST)) {
         die("Failed to make ticket.");
     }
 
-    $name = "vm" . date("mdY-gis") . ".wav";
-    file_put_contents($name, fopen($_REQUEST['RecordingUrl'],"r"));
     $ch = curl_init(); //Initiate a curl session
     $audioheader = array("Authorization: Basic ". base64_encode(strtolower($companyname) . "+" . $apipublickey . ":" . $apiprivatekey), "Content-Type: multipart/form-data");
     $data = array("File" => '@' . $name, "recordType" => "ticket", "recordId" => $ticketnumber,"title"=>"Twilio voice mail on " . date("m-d-Y g:i:sa"));
