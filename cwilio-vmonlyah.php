@@ -4,10 +4,6 @@ require_once("cwilio-config.php");
 
 if(array_key_exists("recorded",$_REQUEST))
 {
-    if($_REQUEST["RecordingDuration"]<=2)
-    {
-        die("Recording too short");
-    }
     $name = "vm" . date("mdY-gis") . ".wav";
     file_put_contents($name, fopen($_REQUEST['RecordingUrl'],"r"));
 
