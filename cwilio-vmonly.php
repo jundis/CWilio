@@ -93,6 +93,9 @@ if(array_key_exists("recorded",$_REQUEST))
             "board" => array(
                 "id" => $boardID
             ),
+            "company" => array(
+                "id" => 4
+            )
         );
     }
 
@@ -116,7 +119,6 @@ if(array_key_exists("recorded",$_REQUEST))
     curl_setopt_array($ch, $curlOpts);
 
     $response = curl_exec($ch);
-
     $headerLen = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     $response = substr($response, $headerLen);
 
@@ -127,7 +129,6 @@ if(array_key_exists("recorded",$_REQUEST))
     curl_close($ch);
 
     $response = json_decode($response);
-
     if (array_key_exists("id", $response))
     {
         $ticketnumber = $response->id;
@@ -170,8 +171,8 @@ else
     header("content-type: text/xml");
     echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     echo "<Response>\n";
-    echo "<Say>Please leave a message after the beep.</Say>\n";
-    //echo '<Play>http://domain.com/cwilio/vmgreeting.mp3</Play>'; //Uncomment this and comment above line to play a mp3 greeting instead.
+    //echo "<Say>Please leave a message after the beep.</Say>\n";//Uncomment this and comment below line to play a text greeting instead.
+    echo '<Play>http://' . $domain . '/cwilio/vm.mp3</Play>';
     echo "<Record transcribe='true' transcribeCallback='cwilio-vmonly.php?recorded=true'/>\n";
     echo "</Response>";
 }

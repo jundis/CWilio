@@ -94,6 +94,9 @@ if(array_key_exists("recorded",$_REQUEST))
             "board" => array(
                 "id" => $boardID
             ),
+            "company" => array(
+                "id" => 4
+            )
         );
     }
 
@@ -173,8 +176,8 @@ else
     header("content-type: text/xml");
     echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     echo "<Response>\n";
-    echo "<Say>Please leave a message after the beep.</Say>\n";
-    //echo '<Play>http://domain.com/cwilio/vmgreetingah.mp3</Play>'; //Uncomment this and comment above line to play a mp3 greeting instead.
+    //echo "<Say>Please leave a message after the beep.</Say>\n";
+    echo '<Play>http://' . $domain . '/cwilio/vmah.mp3</Play>';
     echo "<Record transcribe='true' transcribeCallback='cwilio-vmonlyah.php?recorded=true'/>\n";
     echo "</Response>";
 }

@@ -24,6 +24,7 @@ $apipublickey = "Connectwise Public Key"; //Public API key
 $apiprivatekey = "Connectwise Private Key"; //Private API key
 $ticketlength = "6"; //Expected ticket number length for CW tickets. This is required so the IVR kicks into gear after X numbers are entered. You can also specify that they need to press # instead after entering ticket.
 $boardID = 7; //Used for vmonly/vmonlyah files to send to a specific CW board
+$domain = "test.test.com"; //your domain
 
 //Twilio Configuration
 $accountsid = "SID here"; //Find this on https://www.twilio.com/user/account/
