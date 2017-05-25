@@ -2,6 +2,14 @@
 
 require_once("cwilio-config.php");
 
+if(array_key_exists("ah",$_REQUEST))
+{
+    $afterhours = true;
+}
+else
+{
+    $afterhours = false;
+}
 if(array_key_exists("recorded",$_REQUEST))
 {
     $name = "vm" . date("mdY-gis") . ".wav";
@@ -53,7 +61,14 @@ if(array_key_exists("recorded",$_REQUEST))
         die("<Say>ConnectWise Error: " . $errors[0]->message . "</Say>\n</Response>"); //Return CW error
     }
 
-    $subject = 'Voice message from ' . $_REQUEST['From'];
+    if($afterhours = true)
+    {
+        $subject = 'After hours voice message from ' . $_REQUEST['From'];
+    }
+    else
+    {
+        $subject = 'Voice message from ' . $_REQUEST['From'];
+    }
 
     if ($jsonDecode != null) {
         $phonetype = null;
@@ -168,13 +183,26 @@ if(array_key_exists("recorded",$_REQUEST))
 }
 else
 {
-    header("content-type: text/xml");
-    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    echo "<Response>\n";
-    //echo "<Say>Please leave a message after the beep.</Say>\n";//Uncomment this and comment below line to play a text greeting instead.
-    echo '<Play>http://' . $domain . '/cwilio/vm.mp3</Play>';
-    echo "<Record transcribe='true' transcribeCallback='cwilio-vmonly.php?recorded=true'/>\n";
-    echo "</Response>";
+    if($afterhours = true)
+    {
+        header("content-type: text/xml");
+        echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        echo "<Response>\n";
+        //echo "<Say>Please leave a message after the beep.</Say>\n";//Uncomment this and comment below line to play a text greeting instead.
+        echo '<Play>http://' . $domain . '/cwilio/vmah.mp3</Play>';
+        echo "<Record transcribe='true' transcribeCallback='cwilio-vmonly.php?recorded=true&ah=true'/>\n";
+        echo "</Response>";
+    }
+    else
+    {
+        header("content-type: text/xml");
+        echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        echo "<Response>\n";
+        //echo "<Say>Please leave a message after the beep.</Say>\n";//Uncomment this and comment below line to play a text greeting instead.
+        echo '<Play>http://' . $domain . '/cwilio/vm.mp3</Play>';
+        echo "<Record transcribe='true' transcribeCallback='cwilio-vmonly.php?recorded=true'/>\n";
+        echo "</Response>";
+    }
 }
 
 ?>
