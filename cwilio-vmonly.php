@@ -2,16 +2,16 @@
 
 require_once("cwilio-config.php");
 
-if(array_key_exists("ah",$_REQUEST))
-{
-    $afterhours = true;
-}
-else
-{
-    $afterhours = false;
-}
 if(array_key_exists("recorded",$_REQUEST))
 {
+    if($_REQUEST["recorded"]=="ahtrue")
+    {
+        $afterhours = true;
+    }
+    else
+    {
+        $afterhours = false;
+    }
     $name = "vm" . date("mdY-gis") . ".wav";
     file_put_contents($name, fopen($_REQUEST['RecordingUrl'],"r"));
 
@@ -61,7 +61,7 @@ if(array_key_exists("recorded",$_REQUEST))
         die("<Say>ConnectWise Error: " . $errors[0]->message . "</Say>\n</Response>"); //Return CW error
     }
 
-    if($afterhours = true)
+    if($afterhours == true)
     {
         $subject = 'After hours voice message from ' . $_REQUEST['From'];
     }
@@ -183,19 +183,18 @@ if(array_key_exists("recorded",$_REQUEST))
 }
 else
 {
-    if($afterhours = true)
+    header("content-type: text/xml");
+    if(array_key_exists("ah",$_REQUEST))
     {
-        header("content-type: text/xml");
         echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         echo "<Response>\n";
         //echo "<Say>Please leave a message after the beep.</Say>\n";//Uncomment this and comment below line to play a text greeting instead.
         echo '<Play>http://' . $domain . '/cwilio/vmah.mp3</Play>';
-        echo "<Record transcribe='true' transcribeCallback='cwilio-vmonly.php?recorded=true&ah=true'/>\n";
+        echo "<Record transcribe='true' transcribeCallback='cwilio-vmonly.php?recorded=ahtrue'/>\n";
         echo "</Response>";
     }
     else
     {
-        header("content-type: text/xml");
         echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         echo "<Response>\n";
         //echo "<Say>Please leave a message after the beep.</Say>\n";//Uncomment this and comment below line to play a text greeting instead.
