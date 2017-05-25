@@ -11,11 +11,15 @@
 
 ### VM-Only
 
-You can use the vmonly and vmonlyah files to just transcribe and create tickets for voice mails within ConnectWise.
+You can use the vmonly file to just transcribe and create tickets for voice mails within ConnectWise.
 
-Just configure the CW block of cwilio-config.php and place that and vmonly/vmonlyah.php in a folder and point a twilio line to it.
+Just configure the CW block of cwilio-config.php and place that and vmonly.php in a folder and point a twilio line to it.
 
-Note that in order to use the greeting instead of robo text please see comment towards end of file.
+Note that in order to use the robot text instead of greeting please see comment towards end of file.
+
+This requires an mp3 called vm.mp3 to be in the same directory, assumed to be https://domain.tld/cwilio/vm.mp3
+
+If you want to split off after hours VMs which will be tagged differently in ConnectWise, please use a second twilio line and set its call URL to cwilio-vmonly.php?ah=true instead of cwilio-vmonly.php
 
 ## API Key Setup
 
