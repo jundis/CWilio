@@ -99,6 +99,7 @@ if(array_key_exists("recorded",$_REQUEST))
             "contact" => array(
                 "id" => $jsonDecode->id
             ),
+            "automaticEmailContactFlag" => true, // Needed due to CW known issue #8558748
             "automaticEmailResourceFlag" => true,
             "automaticEmailCcFlag" => true
         );
@@ -114,6 +115,7 @@ if(array_key_exists("recorded",$_REQUEST))
             "company" => array(
                 "id" => 4
             ),
+            "automaticEmailContactFlag" => true, // Needed due to CW known issue #8558748
             "automaticEmailResourceFlag" => true,
             "automaticEmailCcFlag" => true
         );
