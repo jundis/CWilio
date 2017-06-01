@@ -98,7 +98,10 @@ if(array_key_exists("recorded",$_REQUEST))
             ),
             "contact" => array(
                 "id" => $jsonDecode->id
-            ));
+            ),
+            "automaticEmailResourceFlag" => true,
+            "automaticEmailCcFlag" => true
+        );
     } else {
         $body = "The voice mail is attached, and a transcribed text can be found below.\r\n\r\n" . str_replace('<br />', ' ', $_REQUEST['TranscriptionText']);
 
@@ -110,7 +113,9 @@ if(array_key_exists("recorded",$_REQUEST))
             ),
             "company" => array(
                 "id" => 4
-            )
+            ),
+            "automaticEmailResourceFlag" => true,
+            "automaticEmailCcFlag" => true
         );
     }
 
