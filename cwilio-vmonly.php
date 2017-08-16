@@ -162,7 +162,7 @@ if(array_key_exists("recorded",$_REQUEST))
 
     $ch = curl_init(); //Initiate a curl session
     $audioheader = array("Authorization: Basic ". base64_encode(strtolower($companyname) . "+" . $apipublickey . ":" . $apiprivatekey), "Content-Type: multipart/form-data");
-    $data = array("File" => '@' . $name, "recordType" => "ticket", "recordId" => $ticketnumber,"title"=>"Twilio voice mail on " . date("m-d-Y g:i:sa"));
+    $data = array("File" => '@' . $name, "recordType" => "Ticket", "recordId" => $ticketnumber,"title"=>"Twilio voice mail on " . date("m-d-Y g:i:sa"));
 
     $curlOpts = array(
         CURLOPT_URL => $connectwise . "/v4_6_release/apis/3.0/system/documents",
